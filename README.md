@@ -51,7 +51,7 @@ night). Intent lives in editable files: `.fleet/fleet.conf` and
 |---|---|
 | `fleet-init.sh <repo> [--roles a,b] [--yes] [--no-launch]` | stamp `.fleet/`, render briefs, launch tmux fleet |
 | `reset-agent.sh <sess:win> <brief> [--wait\|--force]` | /clear + re-brief one agent; refuses mid-turn unless told |
-| `switch-bug.sh <id> <summary>` | rewrite HANDOFF, reset peers, schedule coordinator self-reset |
+| `switch-task.sh <id> <summary>` | rewrite HANDOFF, reset peers, schedule coordinator self-reset |
 | `fleet-reminder.sh` | UserPromptSubmit hook: cat role reminder every turn |
 | `fleet-watchdog.sh` | cron: nudge hung panes (busy indicator + frozen output) |
 
@@ -61,9 +61,9 @@ night). Intent lives in editable files: `.fleet/fleet.conf` and
 2. `crontab -e`: `*/15 * * * * ~/fleet/bin/fleet-watchdog.sh >> ~/.cache/fleet-watchdog/log 2>&1`
 3. Seed `.fleet/QUEUE.md` with the night's tasks; tell the coordinator to start.
 
-The coordinator switches tasks itself: `switch-bug.sh` is its last action per
+The coordinator switches tasks itself: `switch-task.sh` is its last action per
 task — resets every peer and then itself, so each task starts with four fresh
-contexts and zero stale-bug memory.
+contexts and zero stale-task memory.
 
 ## Design notes
 

@@ -47,7 +47,7 @@ else
   fi
   . "$conf"
 fi
-echo "ROLES=\"$ROLES\"" > "$conf"   # persist: switch-bug.sh sources this
+echo "ROLES=\"$ROLES\"" > "$conf"   # persist: switch-task.sh sources this
 echo "roles: $ROLES"
 
 # --- render role briefs ------------------------------------------------------
@@ -83,7 +83,7 @@ cat > "$repo/.fleet/settings.snippet.json" <<EOF
   "permissions": {
     "allow": [
       "Bash($FLEET_HOME/bin/reset-agent.sh:*)",
-      "Bash($FLEET_HOME/bin/switch-bug.sh:*)",
+      "Bash($FLEET_HOME/bin/switch-task.sh:*)",
       "Bash(tmux send-keys:*)",
       "Bash(tmux capture-pane:*)",
       "Bash(tmux list-windows:*)"

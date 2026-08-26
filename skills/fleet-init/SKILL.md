@@ -42,7 +42,7 @@ Refuses if the agent is mid-turn unless `--wait` (poll ≤30 min) or `--force`.
 ## Switch the fleet to a new task
 
 ```bash
-cd <repo> && ~/fleet/bin/switch-bug.sh <task-id> "one-line brief"
+cd <repo> && ~/fleet/bin/switch-task.sh <task-id> "one-line brief"
 ```
 
 Rewrites `HANDOFF.md`, resets all peers, schedules the coordinator's own reset.
