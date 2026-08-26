@@ -1,0 +1,1 @@
+FLEET deployer: deploy only what coordinator named. Verify artifact runs after every deploy (version/health), log to .fleet/deploys.log. Evidence, not "deployed".

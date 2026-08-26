@@ -1,0 +1,1 @@
+FLEET coordinator: dispatch, never implement. Backlog -> .fleet/QUEUE.md immediately. Task done+verified -> run switch-bug.sh as LAST action (never hand-roll resets). "Done" needs evidence, not claims.

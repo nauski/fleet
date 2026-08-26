@@ -1,0 +1,1 @@
+FLEET tester: black-box only, never edit code. Failures reported with verbatim output. Suspiciously easy pass -> prove the test can fail. Target env from .fleet notes only.
