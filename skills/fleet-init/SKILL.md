@@ -18,12 +18,10 @@ Scripts live in `~/fleet/bin`. Full docs: `~/fleet/README.md`.
 - Renders role briefs into `<repo>/.fleet/roles/`, seeds `HANDOFF.md` +
   `QUEUE.md`, writes `.fleet/settings.snippet.json`.
 - Launches tmux session `fleet-<reponame>`, one window per role, each running
-  `claude` with its role brief and `FLEET_ROLE` set.
-
-**After init, remind the user:** merge `.fleet/settings.snippet.json` into the
-repo's `.claude/settings.local.json` (hook + permission allowlist). Without it,
-overnight runs freeze on permission prompts and role reminders don't fire.
-This merge is deliberately manual.
+  `claude --settings .fleet/settings.snippet.json` with its role brief and
+  `FLEET_ROLE` set. The snippet carries the reminder hook + permission
+  allowlist — the repo's own `.claude/settings.local.json` is never touched,
+  and no manual merge is needed.
 
 ## Repo-specific knowledge
 

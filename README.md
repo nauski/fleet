@@ -29,10 +29,10 @@ owns the procedure (idle check, /clear, re-brief, verification).
 tmux attach -t fleet-myrepo
 ```
 
-Then (once per repo, manual on purpose): merge
-`myrepo/.fleet/settings.snippet.json` into `myrepo/.claude/settings.local.json`.
-It contains the reminder hook and the permission allowlist that keeps
-overnight runs from freezing on prompts.
+No settings surgery needed: each fleet session is launched with
+`claude --settings .fleet/settings.snippet.json`, which carries the reminder
+hook and the permission allowlist (so overnight runs don't freeze on prompts).
+Your `.claude/settings.local.json` is never touched.
 
 ## Role discovery
 
@@ -57,9 +57,8 @@ night). Intent lives in editable files: `.fleet/fleet.conf` and
 
 ## Overnight runs
 
-1. Merge the settings snippet (permission prompts at 03:00 = frozen fleet).
-2. `crontab -e`: `*/15 * * * * ~/fleet/bin/fleet-watchdog.sh >> ~/.cache/fleet-watchdog/log 2>&1`
-3. Seed `.fleet/QUEUE.md` with the night's tasks; tell the coordinator to start.
+1. `crontab -e`: `*/15 * * * * ~/fleet/bin/fleet-watchdog.sh >> ~/.cache/fleet-watchdog/log 2>&1`
+2. Seed `.fleet/QUEUE.md` with the night's tasks; tell the coordinator to start.
 
 The coordinator switches tasks itself: `switch-task.sh` is its last action per
 task — resets every peer and then itself, so each task starts with four fresh

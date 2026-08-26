@@ -70,9 +70,9 @@ if [ -d "$repo/.git" ]; then
   grep -qx '.fleet/' "$repo/.git/info/exclude" 2>/dev/null || echo '.fleet/' >> "$repo/.git/info/exclude"
 fi
 
-# --- hook + permissions: emit snippet for the user to merge ------------------
-# (Deliberately not auto-merged into .claude/settings.local.json: a script that
-# grants itself permissions is the wrong kind of automation. Human merges once.)
+# --- hook + permissions: loaded at launch via `claude --settings` ------------
+# (Never touches the repo's .claude/settings.local.json — fleet sessions get
+# these settings only because fleet-init launches them with this file.)
 cat > "$repo/.fleet/settings.snippet.json" <<EOF
 {
   "hooks": {
@@ -91,18 +91,14 @@ cat > "$repo/.fleet/settings.snippet.json" <<EOF
   }
 }
 EOF
-if [ ! -f "$repo/.claude/settings.local.json" ]; then
-  echo "ACTION NEEDED: no $repo/.claude/settings.local.json —"
-  echo "  copy .fleet/settings.snippet.json there before launching overnight runs."
-else
-  echo "ACTION NEEDED: merge $repo/.fleet/settings.snippet.json into $repo/.claude/settings.local.json"
-fi
-
 # --- launch tmux fleet -------------------------------------------------------
+launch_cmd() { # $1=role
+  printf 'FLEET_ROLE=%s claude --settings .fleet/settings.snippet.json "$(cat .fleet/roles/%s.md)"' "$1" "$1"
+}
 if [ "$no_launch" -eq 1 ]; then
   echo "rendered. launch manually or rerun without --no-launch. Would run:"
   for role in $ROLES; do
-    echo "  tmux window $SESSION:$role -> FLEET_ROLE=$role claude \"\$(cat .fleet/roles/$role.md)\""
+    echo "  tmux window $SESSION:$role -> $(launch_cmd "$role")"
   done
   exit 0
 fi
@@ -117,6 +113,6 @@ for role in $ROLES; do
   else
     tmux new-window -t "$SESSION" -n "$role" -c "$repo"
   fi
-  tmux send-keys -t "$SESSION:$role" "FLEET_ROLE=$role claude \"\$(cat .fleet/roles/$role.md)\"" Enter
+  tmux send-keys -t "$SESSION:$role" "$(launch_cmd "$role")" Enter
 done
 echo "fleet up: tmux attach -t $SESSION"
