@@ -34,6 +34,75 @@ No settings surgery needed: each fleet session is launched with
 hook and the permission allowlist (so overnight runs don't freeze on prompts).
 Your `.claude/settings.local.json` is never touched.
 
+## Example: one night, three bugs
+
+`~/src/webshop`: Flask API, docker-compose deploy, pytest e2e suite.
+
+**22:30 — you set it up.**
+
+```bash
+# repo-specific facts the agents can't infer (written once, reused forever)
+mkdir -p ~/src/webshop/.fleet/notes
+cat > ~/src/webshop/.fleet/notes/deployer.md <<'EOF'
+Deploy: docker compose -f compose.staging.yml up -d --build
+Verify: curl -s localhost:8080/health shows the new git sha.
+Never touch compose.prod.yml.
+EOF
+cat > ~/src/webshop/.fleet/notes/tester.md <<'EOF'
+Target: http://localhost:8080 (staging compose). e2e: pytest tests/e2e -q
+EOF
+
+~/fleet/bin/fleet-init.sh ~/src/webshop
+#   -> scoping pass drafts ROLES="coordinator implementer deployer tester", you accept
+#   -> tmux session fleet-webshop, 4 windows, each running claude with its brief
+```
+
+Seed the backlog and hand over:
+
+```bash
+cat > ~/src/webshop/.fleet/QUEUE.md <<'EOF'
+# QUEUE
+- [ ] BUG-101 checkout 500s when cart has a deleted product
+- [ ] BUG-102 order confirmation email sent twice
+- [ ] TASK-103 add /metrics endpoint (prometheus format)
+EOF
+tmux attach -t fleet-webshop   # tell the coordinator: "start on the queue"
+```
+
+Go to bed.
+
+**22:40 — BUG-101, in-task loop (no resets, all SendMessage).**
+
+- coordinator: reads QUEUE, runs `switch-task.sh BUG-101 "checkout 500s on deleted product"` to make HANDOFF.md the source of truth, briefs implementer.
+- tester (asked first): reproduces the 500 against staging — failure is now a fact, not a report.
+- implementer: fixes null lookup in `cart.py`, runs targeted tests, replies with output.
+- deployer: compose up, curls /health, sees new sha, logs to `.fleet/deploys.log`.
+- tester: repro gone, e2e suite green, verdict PASS with output.
+- Meanwhile every turn in every window, the hook re-injects that role's rules — at 300k tokens the tester still knows it never edits code.
+
+**23:55 — task boundary, the reset moment.**
+
+Coordinator ticks BUG-101 done in QUEUE.md, then as its **last action**:
+
+```bash
+~/fleet/bin/switch-task.sh BUG-102 "order confirmation email sent twice"
+```
+
+HANDOFF.md rewritten; implementer/deployer/tester each get `/clear` + "read your brief + HANDOFF, confirm task id" (waiting politely if one is mid-turn); coordinator's own reset fires when its turn ends. Four fresh contexts. BUG-101's dead ends, stack traces, and stale theories are gone — but its commits, deploy log, and QUEUE state survive, because they were never *in* context.
+
+**02:10 — BUG-102 stalls.** Implementer hangs mid-investigation (busy indicator, no output). 02:15 watchdog cron notices frozen pane, sends Escape + "state your status, re-read HANDOFF, continue". Work resumes. No permission prompt can freeze anything — the allowlist rode in via `--settings` at launch.
+
+**07:30 — you wake up.**
+
+```bash
+cd ~/src/webshop
+cat .fleet/QUEUE.md        # BUG-101 ✓, BUG-102 ✓, TASK-103 in progress
+cat .fleet/HANDOFF.md      # current: TASK-103
+cat .fleet/deploys.log     # every deploy + verification result
+git log --oneline          # the night's commits
+tmux attach -t fleet-webshop   # full scrollback per role, nothing hidden
+```
+
 ## Role discovery
 
 Order of precedence: `--roles` flag > committed `.fleet/fleet.conf`
