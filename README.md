@@ -58,6 +58,13 @@ commands and "this cluster is dev" statements belong in `<repo>/.fleet/notes/`.
 The deny floor (rm -rf, force-push, hard reset, secrets files) applies in every
 mode and beats any allow entry. Your `.claude/settings*.json` is never touched.
 
+Known limit: allow rules are prefix matches on the command as written. A
+chain (`a; b`, `a && b`), a redirection (`2>&1`) or an env-var prefix
+(`FOO=x cmd`) can miss a rule even when every part is listed, and in dontAsk
+that is a silent denial. The worker reminders say "one plain command per Bash
+call"; put env-var-prefixed forms you need (`Bash(FOO=*)`) in
+`<role>-allow.json`.
+
 ## Roles in other repositories
 
 A role can run in its own repo (infra repo for the deployer, e2e repo for the
