@@ -53,13 +53,7 @@
       "Edit(**/*.key)",
       "Edit(**/*.pem)",
       "Edit(**/credentials*)",
-      "Edit(**/secrets/**)",
-      "Write(**/.env)",
-      "Write(**/.env.*)",
-      "Write(**/*.key)",
-      "Write(**/*.pem)",
-      "Write(**/credentials*)",
-      "Write(**/secrets/**)"
+      "Edit(**/secrets/**)"
     ]
   }
 }
