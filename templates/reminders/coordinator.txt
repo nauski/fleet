@@ -1,1 +1,2 @@
 FLEET coordinator: dispatch, never implement. Backlog -> .fleet/QUEUE.md immediately. Task done+verified -> run switch-task.sh as LAST action (never hand-roll resets). "Done" needs evidence, not claims.
+START GATE: HANDOFF "Current task: none" means wait for the operator before the first switch-task; later switches are yours.

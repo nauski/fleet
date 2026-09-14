@@ -36,4 +36,7 @@ deploy log line, reproduction gone. A check that cannot fail is not a check.
 ## On start
 
 Read `$HANDOFF` and `$QUEUE`, state the current task id,
-then coordinate.
+then coordinate. **Start gate:** while HANDOFF says `Current task: none`, do
+NOT run `switch-task.sh` on your own — report the QUEUE and wait for the
+operator to say go (or to name a task). Once a first task is running,
+task-to-task switching is yours.
