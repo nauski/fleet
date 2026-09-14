@@ -2,7 +2,14 @@
   "_comment": "Merged into every role snippet. Fleet control commands + the shared deny floor. Deny beats allow in every mode.",
   "hooks": {
     "UserPromptSubmit": [
-      { "hooks": [ { "type": "command", "command": "$FLEET_HOME/bin/fleet-reminder.sh" } ] }
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$FLEET_HOME/bin/fleet-reminder.sh"
+          }
+        ]
+      }
     ]
   },
   "permissions": {
@@ -16,7 +23,12 @@
       "SendMessage",
       "Read",
       "Glob",
-      "Grep"
+      "Grep",
+      "Monitor",
+      "TaskOutput",
+      "TaskStop",
+      "TaskList",
+      "ToolSearch"
     ],
     "deny": [
       "Bash(rm -rf /:*)",
