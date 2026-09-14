@@ -151,11 +151,9 @@ for role in $ROLES; do
   else
     tmux new-window -t "$SESSION" -n "$role" -c "$rrepo"
   fi
-  # Pin the tab name to the role: Claude Code sets the terminal title to a
-  # rolling conversation summary, and tmux copies that into the window name
-  # when allow-rename is on.
-  tmux set-option -w -t "$SESSION:$role" allow-rename off
-  tmux set-option -w -t "$SESSION:$role" automatic-rename off
   tmux send-keys -t "$SESSION:$role" "$(launch_cmd "$role")" Enter
 done
+# Templated tabs "Role@repo · task" immune to Claude's title rewrites.
+task=$(sed -n 's/^Current task: //p' "$HANDOFF" | head -1); task=${task:-none}
+"$FLEET_HOME/bin/fleet-label.sh" "$SESSION" "$NAME" "$task" $ROLES
 echo "fleet up: tmux attach -t $SESSION"

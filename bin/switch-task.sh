@@ -24,14 +24,19 @@ role_repo() { local v="ROLE_REPO_$1"; printf '%s' "${!v:-$repo}"; }
   echo "Switched: $(date -Is)"
 } > "$handoff"
 
+"$bindir/fleet-label.sh" "$SESSION" "$NAME" "$task" $ROLES || echo "WARN: tab labels not updated" >&2
+
+idx=0
 for role in $ROLES; do
+  win="$SESSION:$idx"; idx=$((idx+1))
   [ "$role" = coordinator ] && continue
-  "$bindir/reset-agent.sh" "$SESSION:$role" "$(role_repo "$role")/.fleet/roles/$role.md" --wait --handoff "$handoff" \
+  "$bindir/reset-agent.sh" "$win" "$(role_repo "$role")/.fleet/roles/$role.md" --wait --handoff "$handoff" \
     || echo "WARN: $role not reset" >&2
 done
 
 if printf '%s\n' $ROLES | grep -qx coordinator; then
-  nohup "$bindir/reset-agent.sh" "$SESSION:coordinator" "$repo/.fleet/roles/coordinator.md" --wait --handoff "$handoff" \
+  cidx=$(printf '%s\n' $ROLES | grep -nx coordinator | cut -d: -f1); cidx=$((cidx-1))
+  nohup "$bindir/reset-agent.sh" "$SESSION:$cidx" "$repo/.fleet/roles/coordinator.md" --wait --handoff "$handoff" \
     >>"$repo/.fleet/reset.log" 2>&1 &
   echo "switched to $task — peers reset, coordinator self-reset scheduled"
 else
