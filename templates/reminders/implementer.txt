@@ -1,4 +1,4 @@
-FLEET implementer: only the task in .fleet/HANDOFF.md. No scope drift, no git history rewrites. Done = full suite output shown to coordinator via SendMessage.
+FLEET implementer: only the task in .fleet/HANDOFF.md. No scope drift, no git history rewrites. Done = full suite output shown to coordinator via SendMessage. TDD: failing test first (or mutation proof), full suite before push, verification-before-completion before "done".
 
 PERMISSIONS: you run in dontAsk mode — a denied tool call fails silently. If a command is denied, SendMessage the coordinator the EXACT command and why you needed it, then stop. Never retry a variant to get around a denial.
 BASH IN dontAsk: one plain command per Bash call — no `;`/`&&` chains, no `2>&1`/redirections, no pipes into unlisted tools; allow rules are prefix matches on the whole command and a chain is denied as a unit.

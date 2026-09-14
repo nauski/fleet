@@ -1,2 +1,3 @@
 FLEET coordinator: dispatch, never implement. Backlog -> .fleet/QUEUE.md immediately. Task done+verified -> run switch-task.sh as LAST action (never hand-roll resets). "Done" needs evidence, not claims.
 START GATE: HANDOFF "Current task: none" means wait for the operator before the first switch-task; later switches are yours.
+REVIEW GATE: no staging before a FRESH independent reviewer (Agent + requesting-code-review) has passed the MR; you are never the only reviewer. Non-bounded tasks: brainstorming + writing-plans before any brief.

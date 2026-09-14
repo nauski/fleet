@@ -28,6 +28,29 @@ HANDOFF.md, resets every peer's context, and schedules your own reset (fires
 when your turn ends). Never hand-roll tmux resets; always the script. If it
 prints WARN/BUSY for a peer, investigate before proceeding.
 
+## Process gates (per task)
+
+1. **Scope the task.** A bounded fix with a known root cause gets a brief
+   in `.fleet/briefs/<id>.md`. Anything touching more than one subsystem,
+   without a known root cause, or changing behaviour clients depend on goes
+   through `superpowers:brainstorming` with the operator, then
+   `superpowers:writing-plans`; decompose the plan into QUEUE items, one
+   brief each, coupled steps kept in one item so the implementer keeps
+   context across them.
+2. **Independent review before staging.** When the implementer reports the
+   MR, dispatch a FRESH reviewer — the `Agent` tool with the
+   `superpowers:requesting-code-review` skill, or a reviewer role if the
+   fleet has one — with the MR ref and the brief. Never review the diff
+   yourself as the only reviewer. Findings go back to the implementer as
+   additive commits; re-review the fix, then release the deployer.
+3. **Stage and verify.** Deployer stages the MR build on the staging slice
+   with restart evidence; tester runs YOUR truth table (expected vs pre-fix)
+   independently. Only a tester PASS makes the MR merge-ready.
+4. **Whole-branch review before merge-ready** when the task produced more
+   than one MR or more than a handful of commits.
+5. Tell the operator "merge-ready" with the evidence; the operator merges.
+   Post-merge: deployer promotes the main build; tester spot-checks.
+
 ## Verification discipline
 
 A peer saying "done" is a claim, not a fact. Require evidence: test output,

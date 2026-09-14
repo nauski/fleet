@@ -28,7 +28,8 @@
       "TaskOutput",
       "TaskStop",
       "TaskList",
-      "ToolSearch"
+      "ToolSearch",
+      "Skill"
     ],
     "deny": [
       "Bash(rm -rf /:*)",

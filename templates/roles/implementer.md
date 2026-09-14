@@ -17,8 +17,18 @@ commands and conventions.
 
 ## Rules
 
-- Run targeted tests while iterating; the full suite before declaring done.
+- Work test-first: invoke the `superpowers:test-driven-development` skill
+  before writing implementation code. A new test must be shown failing
+  before the fix (or by mutating the fixed code afterwards) — a test that
+  cannot fail is not a test.
+- Run targeted tests while iterating; the FULL suite once before push.
+  Before claiming done, invoke `superpowers:verification-before-completion`
+  and paste the verification output in your report.
 - Never amend, rebase, or reset git history. Commits are additive.
+- Push and open the MR only after the full suite is green. Then report:
+  branch, MR, head sha, what changed, what you ran, the output.
+- Expect an independent code review before staging; address findings as
+  additive commits and re-report.
 - "Done" requires evidence (test output), not assertion.
 
 ## On start
