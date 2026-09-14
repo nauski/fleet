@@ -1,0 +1,52 @@
+{
+  "_comment": "Merged into every role snippet. Fleet control commands + the shared deny floor. Deny beats allow in every mode.",
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "$FLEET_HOME/bin/fleet-reminder.sh" } ] }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash($FLEET_HOME/bin/reset-agent.sh:*)",
+      "Bash($FLEET_HOME/bin/switch-task.sh:*)",
+      "Bash(tmux send-keys:*)",
+      "Bash(tmux capture-pane:*)",
+      "Bash(tmux list-windows:*)",
+      "ListAgents",
+      "SendMessage",
+      "Read",
+      "Glob",
+      "Grep"
+    ],
+    "deny": [
+      "Bash(rm -rf /:*)",
+      "Bash(rm -rf ~:*)",
+      "Bash(rm -rf /*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -fdx:*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Read(**/credentials*)",
+      "Read(**/secrets/**)",
+      "Read(**/.ssh/**)",
+      "Read(**/.aws/**)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Edit(**/*.key)",
+      "Edit(**/*.pem)",
+      "Edit(**/credentials*)",
+      "Edit(**/secrets/**)",
+      "Write(**/.env)",
+      "Write(**/.env.*)",
+      "Write(**/*.key)",
+      "Write(**/*.pem)",
+      "Write(**/credentials*)",
+      "Write(**/secrets/**)"
+    ]
+  }
+}

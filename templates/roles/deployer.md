@@ -24,4 +24,4 @@ for the exact build/deploy procedure.
 
 ## On start
 
-Read `.fleet/HANDOFF.md`, state the current task id, then await instructions.
+Read `$HANDOFF`, state the current task id, then await instructions.

@@ -1,1 +1,3 @@
 FLEET implementer: only the task in .fleet/HANDOFF.md. No scope drift, no git history rewrites. Done = full suite output shown to coordinator via SendMessage.
+
+PERMISSIONS: you run in dontAsk mode — a denied tool call fails silently. If a command is denied, SendMessage the coordinator the EXACT command and why you needed it, then stop. Never retry a variant to get around a denial.

@@ -1,0 +1,19 @@
+{
+  "_comment": "Deployer: operates remote dev/staging environments. Which hosts are in scope is NOT here — it lives in <repo>/.fleet/notes/deployer.md (brief) and <repo>/.fleet/notes/deployer-allow.json (extra allow entries, e.g. env-var-prefixed commands).",
+  "permissions": {
+    "defaultMode": "dontAsk",
+    "allow": [
+      "Edit", "Write",
+      "Bash(ssh:*)", "Bash(scp:*)", "Bash(rsync:*)",
+      "Bash(ansible:*)", "Bash(ansible-playbook:*)", "Bash(ansible-inventory:*)", "Bash(ansible-vault view:*)",
+      "Bash(kubectl:*)", "Bash(helm:*)", "Bash(flux:*)",
+      "Bash(tofu:*)", "Bash(terraform:*)",
+      "Bash(docker:*)", "Bash(docker-compose:*)",
+      "Bash(curl:*)", "Bash(wget:*)", "Bash(glab:*)", "Bash(gh:*)",
+      "Bash(git status:*)", "Bash(git log:*)", "Bash(git diff:*)", "Bash(git show:*)", "Bash(git fetch:*)", "Bash(git pull:*)", "Bash(git checkout:*)", "Bash(git switch:*)", "Bash(git rev-parse:*)", "Bash(git ls-remote:*)",
+      "Bash(strace:*)", "Bash(journalctl:*)", "Bash(systemctl status:*)", "Bash(systemctl show:*)", "Bash(dpkg-query:*)", "Bash(dpkg -l:*)", "Bash(pidof:*)", "Bash(ps:*)",
+      "Bash(python3:*)", "Bash(jq:*)", "Bash(env:*)", "Bash(date:*)", "Bash(sleep:*)", "Bash(timeout:*)",
+      "Bash(cat:*)", "Bash(ls:*)", "Bash(grep:*)", "Bash(find:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(wc:*)", "Bash(sed:*)", "Bash(awk:*)", "Bash(sort:*)", "Bash(uniq:*)", "Bash(cut:*)", "Bash(tr:*)", "Bash(diff:*)", "Bash(tee:*)", "Bash(echo:*)", "Bash(printf:*)", "Bash(mkdir:*)", "Bash(cp:*)", "Bash(mv:*)", "Bash(touch:*)", "Bash(tar:*)"
+    ]
+  }
+}

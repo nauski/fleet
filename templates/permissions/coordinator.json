@@ -1,0 +1,18 @@
+{
+  "_comment": "Coordinator: the human's interface. Stays in auto mode (classifier = last safety net). Add autoMode.allow prose for your environments in <repo>/.fleet/notes/coordinator-allow.json.",
+  "permissions": {
+    "defaultMode": "auto",
+    "allow": [
+      "Bash(git status:*)", "Bash(git log:*)", "Bash(git diff:*)", "Bash(git show:*)", "Bash(git branch:*)", "Bash(git fetch:*)",
+      "Bash(glab:*)", "Bash(gh:*)",
+      "Bash(cat:*)", "Bash(ls:*)", "Bash(grep:*)", "Bash(find:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(wc:*)", "Bash(sed -n:*)",
+      "Edit", "Write"
+    ]
+  },
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Asking peer fleet sessions (deployer, tester, implementer) via SendMessage to build, deploy, restart, roll out, or test in the environments named in this repo's .fleet/notes is allowed; those notes define which environments are development-only."
+    ]
+  }
+}

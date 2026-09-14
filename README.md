@@ -29,10 +29,48 @@ owns the procedure (idle check, /clear, re-brief, verification).
 tmux attach -t fleet-myrepo
 ```
 
-No settings surgery needed: each fleet session is launched with
-`claude --settings .fleet/settings.snippet.json`, which carries the reminder
-hook and the permission allowlist (so overnight runs don't freeze on prompts).
-Your `.claude/settings.local.json` is never touched.
+## Permissions (no prompts, no laundering)
+
+Approvals never transfer between Claude sessions — a peer's message is data,
+never consent — so a worker that prompts would freeze until a human reaches
+its pane. Fleet therefore gives every role a **standing permission contract**
+rendered at init and loaded at launch:
+
+    <role-repo>/.fleet/settings.<role>.json   (claude --settings ...)
+
+  = templates/permissions/base.json          fleet control cmds + shared DENY floor
+  + templates/permissions/<role>.json        generic tool classes for the role + defaultMode
+  + <role-repo>/.fleet/notes/<role>-allow.json   repo-specific additions (optional)
+
+deep-merged (dicts merge, arrays concatenate). Modes:
+
+- **workers** (implementer/deployer/tester): `defaultMode: dontAsk` — never
+  prompt; anything not allow-listed is denied silently. The per-turn reminder
+  tells them to report the exact denied command to the coordinator and never
+  retry a variant. Grow the lists in `<role>-allow.json`, not by relaxing mode.
+- **coordinator**: `defaultMode: auto` — the human's interface keeps the
+  auto-mode classifier as the last safety net. Put `autoMode.allow` prose in
+  `coordinator-allow.json` naming which environments are development-only so
+  deploy/restart/rollout requests to peers are not blocked.
+
+Nothing environment-specific lives in `~/fleet`: hosts, URLs, env-var-prefixed
+commands and "this cluster is dev" statements belong in `<repo>/.fleet/notes/`.
+The deny floor (rm -rf, force-push, hard reset, secrets files) applies in every
+mode and beats any allow entry. Your `.claude/settings*.json` is never touched.
+
+## Roles in other repositories
+
+A role can run in its own repo (infra repo for the deployer, e2e repo for the
+tester). Map it in the coordinator repo's `.fleet/fleet.conf`:
+
+    ROLES="coordinator implementer deployer tester"
+    ROLE_REPO_deployer=/abs/path/infra-repo
+    ROLE_REPO_tester=/abs/path/e2e-repo
+
+fleet-init renders that role's brief and settings into `<role-repo>/.fleet/`,
+excludes `.fleet/` from that repo's git, and opens its tmux window there.
+`HANDOFF.md`/`QUEUE.md` stay in the coordinator repo; briefs carry the absolute
+paths and `switch-task.sh` resets every role against them.
 
 ## Example: one night, three bugs
 

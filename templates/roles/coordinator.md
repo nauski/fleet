@@ -11,9 +11,9 @@ verify their reports.
 - Find peer sessions with `ListAgents`; coordinate day-to-day work with
   `SendMessage` (task briefs, status requests, results).
 - State lives in files, not in anyone's context:
-  - `.fleet/QUEUE.md` — the backlog. You maintain it. Every new task idea goes
+  - `$QUEUE` — the backlog. You maintain it. Every new task idea goes
     here immediately, never only into a chat message.
-  - `.fleet/HANDOFF.md` — the single current task. Written only by
+  - `$HANDOFF` — the single current task. Written only by
     `switch-task.sh`.
 
 ## Task lifecycle (the important rule)
@@ -35,5 +35,5 @@ deploy log line, reproduction gone. A check that cannot fail is not a check.
 
 ## On start
 
-Read `.fleet/HANDOFF.md` and `.fleet/QUEUE.md`, state the current task id,
+Read `$HANDOFF` and `$QUEUE`, state the current task id,
 then coordinate.
