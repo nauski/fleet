@@ -13,9 +13,9 @@ label_task=$task; [ "$task" = none ] && label_task=idle
 fmt=$(tmux show-options -gv window-status-format 2>/dev/null || echo '#I:#W#F')
 cfmt=$(tmux show-options -gv window-status-current-format 2>/dev/null || echo '#I:#W#F')
 # #T (Claude's rolling title) -> state icon + our window name.
-# @fleet_icon is set by fleet-state.sh from Claude Code hooks: ● working,
-# ○ idle (incl. waiting for peers), ! needs the operator.
-lbl='#{?@fleet_icon,#{@fleet_icon},○} #W'
+# @fleet_icon is set by fleet-state.sh from Claude Code hooks: 🔨 working,
+# 💤 idle (incl. waiting for peers), 🙋 needs the operator.
+lbl='#{?@fleet_icon,#{@fleet_icon},💤} #W'
 fmt=${fmt//\#T/$lbl}; fmt=${fmt//\#\{pane_title\}/$lbl}
 cfmt=${cfmt//\#T/$lbl}; cfmt=${cfmt//\#\{pane_title\}/$lbl}
 i=0
@@ -26,7 +26,10 @@ for role in $roles; do
   tmux set-option -w -t "$t" window-status-format "$fmt"
   tmux set-option -w -t "$t" window-status-current-format "$cfmt"
   tmux set-option -w -t "$t" @fleet_state idle 2>/dev/null || true
-  tmux set-option -w -t "$t" @fleet_icon '○' 2>/dev/null || true
-  tmux rename-window -t "$t" "${role^}@$name · $label_task"
+  tmux set-option -w -t "$t" @fleet_icon '💤' 2>/dev/null || true
+  case "$role" in
+    coordinator) badge='🎯' ;; implementer) badge='🔧' ;; deployer) badge='🚀' ;; tester) badge='🧪' ;; *) badge='🤖' ;;
+  esac
+  tmux rename-window -t "$t" "$badge ${role^}@$name · $label_task"
   i=$((i+1))
 done

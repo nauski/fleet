@@ -12,9 +12,9 @@ if [ "$state" = notification ]; then
   case "$t" in *permission*) state=attention ;; *) exit 0 ;; esac
 fi
 case "$state" in
-  working)   icon='●' ;;
-  attention) icon='!' ;;
-  *)         icon='○' ;;
+  working)   icon='🔨' ;;
+  attention) icon='🙋' ;;
+  *)         icon='💤' ;;
 esac
 tmux set-option -w -t "$TMUX_PANE" @fleet_state "$state" 2>/dev/null || true
 tmux set-option -w -t "$TMUX_PANE" @fleet_icon "$icon" 2>/dev/null || true
