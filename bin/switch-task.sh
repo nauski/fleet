@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# switch-task.sh <task-id> <one-line summary...>
+# switch-task.sh [--reset-coordinator] <task-id> <one-line summary...>
 # Run from the COORDINATOR repo root (the coordinator does this as the LAST
 # action of its turn). Updates HANDOFF.md, resets all peer windows (each in
 # its own repo per fleet.conf ROLE_REPO_*), then schedules the coordinator's
-# own reset in the background (fires once its current turn ends).
+# own reset in the background only with --reset-coordinator.
 set -euo pipefail
+reset_coord=0
+[ "${1:-}" = "--reset-coordinator" ] && { reset_coord=1; shift; }
 task=$1; shift
 summary="$*"
 repo="$(pwd)"
@@ -34,7 +36,10 @@ for role in $ROLES; do
     || echo "WARN: $role not reset" >&2
 done
 
-if printf '%s\n' $ROLES | grep -qx coordinator; then
+# The coordinator is the human's long-form conversation: it is NOT reset by
+# default (the operator /clear's it when they want). --reset-coordinator
+# restores the self-reset for unattended overnight runs.
+if [ "$reset_coord" -eq 1 ] && printf '%s\n' $ROLES | grep -qx coordinator; then
   cidx=$(printf '%s\n' $ROLES | grep -nx coordinator | cut -d: -f1); cidx=$((cidx-1))
   nohup "$bindir/reset-agent.sh" "$SESSION:$cidx" "$repo/.fleet/roles/coordinator.md" --wait --handoff "$handoff" \
     >>"$repo/.fleet/reset.log" 2>&1 &

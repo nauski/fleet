@@ -175,8 +175,11 @@ night). Intent lives in editable files: `.fleet/fleet.conf` and
 2. Seed `.fleet/QUEUE.md` with the night's tasks; tell the coordinator to start.
 
 The coordinator switches tasks itself: `switch-task.sh` is its last action per
-task — resets every peer and then itself, so each task starts with four fresh
-contexts and zero stale-task memory.
+task — it resets every peer so each task starts with fresh worker contexts.
+The coordinator itself is the operator's long-form conversation and is NOT
+reset by default; clear it yourself (`/clear`, or `reset-agent.sh` on its
+window) when you want. For unattended overnight runs, tell the coordinator to
+use `switch-task.sh --reset-coordinator` so its own context is recycled too.
 
 ## Design notes
 

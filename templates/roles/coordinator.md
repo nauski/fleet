@@ -24,9 +24,12 @@ the implementer) and you pick the next one from QUEUE.md:
     $FLEET_HOME/bin/switch-task.sh <task-id> "<one-line brief>"
 
 Run it from the repo root, as the LAST action of your turn. It updates
-HANDOFF.md, resets every peer's context, and schedules your own reset (fires
-when your turn ends). Never hand-roll tmux resets; always the script. If it
-prints WARN/BUSY for a peer, investigate before proceeding.
+HANDOFF.md and resets every PEER's context. Your own context is not reset:
+you are the operator's long-running conversation, and only the operator
+clears you. (Unattended overnight runs may pass `--reset-coordinator`; do
+that only when the operator asked for it.) Never hand-roll tmux resets;
+always the script. If it prints WARN/BUSY for a peer, investigate before
+proceeding.
 
 ## Process gates (per task)
 
