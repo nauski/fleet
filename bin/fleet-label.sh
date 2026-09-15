@@ -27,9 +27,6 @@ for role in $roles; do
   tmux set-option -w -t "$t" window-status-current-format "$cfmt"
   tmux set-option -w -t "$t" @fleet_state idle 2>/dev/null || true
   tmux set-option -w -t "$t" @fleet_icon '💤' 2>/dev/null || true
-  case "$role" in
-    coordinator) badge='🎯' ;; implementer) badge='🔧' ;; deployer) badge='🚀' ;; tester) badge='🧪' ;; *) badge='🤖' ;;
-  esac
-  tmux rename-window -t "$t" "$badge ${role^}@$name · $label_task"
+  tmux rename-window -t "$t" "${role^}@$name · $label_task"
   i=$((i+1))
 done
