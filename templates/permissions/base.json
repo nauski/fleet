@@ -9,6 +9,44 @@
             "command": "$FLEET_HOME/bin/fleet-reminder.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$FLEET_HOME/bin/fleet-state.sh working"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$FLEET_HOME/bin/fleet-state.sh working"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$FLEET_HOME/bin/fleet-state.sh idle"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$FLEET_HOME/bin/fleet-state.sh notification"
+          }
+        ]
       }
     ]
   },

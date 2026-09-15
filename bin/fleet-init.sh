@@ -95,6 +95,12 @@ for p in (os.path.join(home, "templates", "permissions", "base.json"), tpl,
           os.path.join(rrepo, ".fleet", "notes", role + "-allow.json")):
     merged = merge(merged, load(p))
 merged.pop("_comment", None)
+# Roles running in their own repo still read/append the coordinator repo's
+# .fleet state via Bash; without this, dontAsk refuses every out-of-cwd path.
+crepo = os.environ.get("REPO")
+if crepo and os.path.realpath(rrepo) != os.path.realpath(crepo):
+    dirs = merged.setdefault("permissions", {}).setdefault("additionalDirectories", [])
+    if crepo not in dirs: dirs.append(crepo)
 mode = merged.get("permissions", {}).get("defaultMode")
 if mode not in ("auto", "dontAsk", "acceptEdits", "default", "plan"):
     sys.exit(f"role {role}: permissions.defaultMode must be set in the template (got {mode!r})")
