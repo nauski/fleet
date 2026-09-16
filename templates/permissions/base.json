@@ -91,7 +91,23 @@
       "Edit(**/*.key)",
       "Edit(**/*.pem)",
       "Edit(**/credentials*)",
-      "Edit(**/secrets/**)"
+      "Edit(**/secrets/**)",
+      "Bash(git push origin main:*)",
+      "Bash(git push -u origin main:*)",
+      "Bash(git push origin HEAD:main:*)",
+      "Bash(git push origin HEAD:refs/heads/main:*)",
+      "Bash(git push upstream:*)",
+      "Bash(git push --mirror:*)",
+      "Bash(glab mr merge:*)",
+      "Bash(glab mr approve:*)",
+      "Bash(glab mr close:*)",
+      "Bash(glab api --method PUT:*)",
+      "Bash(glab api --method DELETE:*)",
+      "Bash(env -u GITLAB_TOKEN glab mr merge:*)",
+      "Bash(env -u GITLAB_TOKEN glab mr approve:*)",
+      "Bash(env -u GITLAB_TOKEN glab api --method PUT:*)",
+      "Bash(env -u GITLAB_TOKEN glab api --method DELETE:*)",
+      "Bash(gh pr merge:*)"
     ]
   }
 }

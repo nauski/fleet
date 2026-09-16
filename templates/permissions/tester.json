@@ -62,7 +62,17 @@
       "Bash(xxd:*)",
       "Bash(pkill -f:*)",
       "Bash(ssh -O exit:*)",
-      "Bash(ssh -O check:*)"
+      "Bash(ssh -O check:*)",
+      "Bash(cargo build:*)",
+      "Bash(cargo:*)",
+      "Bash(python3 gen-proxy-demo.py:*)",
+      "Bash(JMAPTEST_URL=*)",
+      "Bash(JMAPTEST_OUT=*)",
+      "Bash(./target/release/jmaptest:*)",
+      "Bash(/home/juha/jmaptest/target/release/jmaptest:*)"
+    ],
+    "additionalDirectories": [
+      "/home/juha/jmaptest"
     ]
   }
 }
