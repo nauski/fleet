@@ -65,6 +65,11 @@ that is a silent denial. The worker reminders say "one plain command per Bash
 call"; put env-var-prefixed forms you need (`Bash(FOO=*)`) in
 `<role>-allow.json`.
 
+MR edits: the deny floor blocks every `glab api --method PUT` so no worker can
+merge or approve. To edit an MR's title/description/labels use
+`~/fleet/bin/mr-edit.sh --host H --project G%2FP --iid N --description-file F`,
+which is allow-listed and cannot reach the merge/approve endpoints.
+
 ## Roles in other repositories
 
 A role can run in its own repo (infra repo for the deployer, e2e repo for the

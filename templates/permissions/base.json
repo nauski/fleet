@@ -67,7 +67,8 @@
       "TaskStop",
       "TaskList",
       "ToolSearch",
-      "Skill"
+      "Skill",
+      "Bash($FLEET_HOME/bin/mr-edit.sh:*)"
     ],
     "deny": [
       "Bash(rm -rf /:*)",
